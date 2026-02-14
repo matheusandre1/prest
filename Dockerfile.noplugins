@@ -1,10 +1,13 @@
 FROM registry.hub.docker.com/library/golang:1.25 as builder
 WORKDIR /workspace
 COPY . .
+ARG VERSION
+ARG COMMIT
+ARG DATE
 ENV GOOS linux
 ENV CGO_ENABLED 1
 RUN go mod vendor && \
-    go build -ldflags "-s -w" -o prestd cmd/prestd/main.go && \
+    go build -ldflags "-s -w -X main.version=${VERSION} -X main.commit=${COMMIT} -X main.date=${DATE}" -o prestd cmd/prestd/main.go && \
     apt-get update && apt-get upgrade -y && apt-get install --no-install-recommends -yq netcat-traditional && rm -rf /var/lib/apt/lists/*
 
 # Use runtime image

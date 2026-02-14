@@ -64,3 +64,22 @@ docker compose -f docker-compose-test.yml down -v --remove-orphans
 ```
 
 The `tests` service runs `./testdata/runtest.sh`, provisioning databases and executing Go tests.
+
+## Example: Docker Build
+
+You can build the Docker image locally for development (this compiles the code from source):
+
+```bash
+docker build -t prest/prest:latest .
+```
+
+For release builds, GoReleaser uses the same `Dockerfile` but injects version information via build arguments:
+
+```bash
+docker build \
+  --build-arg VERSION=v1.0.0 \
+  --build-arg COMMIT=hash \
+  --build-arg DATE=2026-02-11 \
+  -t prest/prest:latest .
+```
+
